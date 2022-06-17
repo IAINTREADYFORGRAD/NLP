@@ -63,25 +63,35 @@ for i in range(0, 4):
                         words.append(word.word)
                 file2.write(" ".join(words).strip()) 
                     
+N_features =100
+
 #D
 c="Dok"
 pcr_D = PlaintextCorpusReader(root=c, fileids=".*\.txt") 
 D_doc = [(pcr_D.words(fileid),c) for fileid in pcr_D.fileids()]
+#ALL=FreqDist(pcr_D.words())
+#print(list(ALL)[:N_features])
 
 #I
 c="Iok"
 pcr_I = PlaintextCorpusReader(root=c, fileids=".*\.txt") 
 I_doc = [(pcr_I.words(fileid),c) for fileid in pcr_I.fileids()]
+#ALL=FreqDist(pcr_I.words())
+#print(list(ALL)[:N_features])
 
 #S
 c="Sok"
 pcr_S = PlaintextCorpusReader(root=c, fileids=".*\.txt") 
 S_doc = [(pcr_S.words(fileid),c) for fileid in pcr_S.fileids()]
+#ALL=FreqDist(pcr_S.words())
+#print(list(ALL)[:N_features])
 
 #C
 c="Cok"
 pcr_C = PlaintextCorpusReader(root=c, fileids=".*\.txt") 
 C_doc = [(pcr_C.words(fileid),c) for fileid in pcr_C.fileids()]
+#ALL=FreqDist(pcr_S.words())
+#print(list(ALL)[:N_features])
 
 
 documents = D_doc + I_doc + S_doc + C_doc
@@ -104,7 +114,10 @@ featuresets = [(document_features(d), c) for (d,c) in documents]
 #machine training
 train_set, test_set = featuresets[N_testing:], featuresets[:N_testing]
 classifier = NaiveBayesClassifier.train(train_set) 
+
 print(classify.accuracy(classifier, test_set))
+print(classifier.show_most_informative_features(10))
+
 
 #testing & predict
 c="c10"
