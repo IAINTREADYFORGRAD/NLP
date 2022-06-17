@@ -150,7 +150,7 @@ i35_doc = [(pcr_i35.words(fileid),c) for fileid in pcr_i35.fileids()]
 i35_features=[(document_features(d), c) for (d,c) in i35_doc] 
 for a, b in i35_features:
     result=classifier.classify(a)
-print(result) #I
+print(result) #D
 
 c="I25"
 pcr_i25 = PlaintextCorpusReader(root=".\I", fileids="I25.txt")
