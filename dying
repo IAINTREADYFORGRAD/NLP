@@ -1,3 +1,29 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Jun 13 00:08:20 2022
+
+@author: w2000
+"""
+
+# -*- coding: utf-8 -*-
+"""
+Created on Sun May 29 18:05:15 2022
+
+@author: w2000
+"""
+
+'''
+import os, time
+import jieba
+import jieba.analyse 
+import jieba.posseg as psg
+from nltk.corpus.reader import PlaintextCorpusReader
+from nltk.probability import FreqDist
+import random
+from nltk import classify
+from nltk import NaiveBayesClassifier
+import re
+'''
 
 #DISC classifier
 stopwords=[]
@@ -56,46 +82,25 @@ pcr_C = PlaintextCorpusReader(root=c, fileids=".*\.txt")
 C_doc = [(pcr_C.words(fileid),c) for fileid in pcr_C.fileids()]
 #[(['CONSCIENTIOUSNESS', 'cautious', 'skeptical', ...], 'Cok')]
 
+
+
+
+
+documents = D_doc + I_doc + S_doc + C_doc
+random.shuffle(x=documents) 
+
+
+N_features =100
+all_words = FreqDist(pcr_D.words() + pcr_I.words() + pcr_S.words() + pcr_C.words())   
+#word_features = list(all_words)[:N_features] 
+#print(word_features)
+
 def document_features(document_words):
     document_words = set(document_words)
     features = {}
     for word in word_features:
         features['contains({})'.format(word)] = (word in document_words) 
     return features
-
-c="Hermione"
-pcr_her = PlaintextCorpusReader(root="./", fileids="Hermione.txt")
-her_doc = [(pcr_her.words(fileid), c) for fileid in pcr_her.fileids()]
-word_features = list(pcr_her.words())
-her_features=[(document_features(d), c) for (d,c) in her_doc] 
-
-c="Dudley"
-pcr_dud = PlaintextCorpusReader(root="./", fileids="Dudley.txt")
-dud_doc = [(pcr_dud.words(fileid),c) for fileid in pcr_dud.fileids()]
-word_features = list(pcr_dud.words())
-dud_features=[(document_features(d), c) for (d,c) in dud_doc] 
-
-c="Harry"
-pcr_ha = PlaintextCorpusReader(root="./", fileids="Harry.txt")
-ha_doc = [(pcr_ha.words(fileid),c) for fileid in pcr_ha.fileids()]
-word_features = list(pcr_ha.words())
-ha_feature = [(document_features(d), c) for (d,c) in ha_doc] 
-
-
-c="Malfoy"
-pcr_mal = PlaintextCorpusReader(root="./", fileids="Malfoy.txt")
-mal_doc = [(pcr_mal.words(fileid),c) for fileid in pcr_mal.fileids()]
-word_features = list(pcr_mal.words())
-mal_features = [(document_features(d), c) for (d,c) in mal_doc] 
-
-
-documents = D_doc + I_doc + S_doc + C_doc
-random.shuffle(x=documents) 
-
-N_features =100
-all_words = FreqDist(pcr_D.words() + pcr_I.words() + pcr_S.words() + pcr_C.words())   
-#word_features = list(all_words)[:N_features] 
-#print(word_features)
 
 N_testing = 20
 featuresets = [(document_features(d), c) for (d,c) in documents] 
@@ -109,7 +114,18 @@ train_set, test_set = featuresets[N_testing:], featuresets[:N_testing]
 
 
 classifier = NaiveBayesClassifier.train(train_set) 
+def word_feat(words):
+    return dict([(word, True) for word in words])
 
-print("Hermione: %s" %classifier.classify(her_features)) 
-#her_features 在 70 行 
-#'list' object has no attribute 'keys'
+words=[]
+for word in open(file="Hermione.txt", mode="r", encoding="utf8"):
+    words.append(word.strip())
+result=classifier.classify(word_feat(words))
+print(result) #D
+
+words=[]
+for word in open(file="Iok\Iok10.txt", mode="r", encoding="utf8"):
+    words.append(word.strip())
+result=classifier.classify(word_feat(words))
+print(result) #D
+
