@@ -1,17 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jun 13 00:08:20 2022
-
-@author: w2000
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Sun May 29 18:05:15 2022
-
-@author: w2000
-"""
-
 '''
 import os, time
 import jieba
@@ -26,10 +12,10 @@ import re
 '''
 
 #text 
-character=["Dudley", "Hermione", "Harry", "Malfoy"]
-char_stopwords=["stopwords_Dudley.txt", "stopwords_Hermione.txt", "stopwords_Harry.txt", "stopwords_Malfoy.txt"]
+character=["Hermione", "Harry", "Malfoy", "Dudley"]
+char_stopwords=["stopwords_Hermione.txt", "stopwords_Harry.txt", "stopwords_Malfoy.txt", "stopwords_Dudley.txt"]
 
-for i in range (0, 4):  
+for i in range (0, 1): 
     stopwords=[]
     line_with_name=[]
     words=[]      
@@ -39,8 +25,9 @@ for i in range (0, 4):
         text=file1.read().replace("\n", " ")
         cutsentence=re.split(r'[\n;.?!]', text) 
         for sentence in cutsentence:
+            b=re.search(pattern="“" + ".*" + character[i]+ ".*" + "”", string=sentence)
             a=re.search(pattern=character[i], string=sentence)
-            if a:
+            if a != b:
                 line_with_name.append(sentence)
     with open(file="%s.txt" %character[i], mode="w", encoding="utf8") as file2:
         for sentence in line_with_name:
