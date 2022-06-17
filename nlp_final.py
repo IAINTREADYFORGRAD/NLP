@@ -97,16 +97,16 @@ C_doc = [(pcr_C.words(fileid),c) for fileid in pcr_C.fileids()]
 documents = D_doc + I_doc + S_doc + C_doc
 random.shuffle(x=documents) 
 
+N_features =100
+all_words = FreqDist(pcr_D.words() + pcr_I.words() + pcr_S.words() + pcr_C.words())   
+word_features = list(all_words)[:N_features] 
+
 def document_features(document_words):
     document_words = set(document_words)
     features = {}
     for word in word_features:
         features['contains({})'.format(word)] = (word in document_words) 
     return features
-
-N_features =100
-all_words = FreqDist(pcr_D.words() + pcr_I.words() + pcr_S.words() + pcr_C.words())   
-word_features = list(all_words)[:N_features] 
 
 N_testing = 20
 featuresets = [(document_features(d), c) for (d,c) in documents] 
